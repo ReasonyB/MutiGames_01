@@ -49,6 +49,10 @@ AOnlyRPGCharacter::AOnlyRPGCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+	static ConstructorHelpers::FObjectFinder<UInputAction>IA_ATTACK
+	(TEXT("/Game/ThirdPerson/Input/Actions/IA_Attack.IA_Attack"));
+	if (IA_ATTACK.Succeeded())
+		AttackAction = IA_ATTACK.Object;
 }
 
 void AOnlyRPGCharacter::BeginPlay()
@@ -84,6 +88,8 @@ void AOnlyRPGCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 		//Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AOnlyRPGCharacter::Look);
 
+		//Attack
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AOnlyRPGCharacter::Attack);
 	}
 
 }
@@ -124,6 +130,6 @@ void AOnlyRPGCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+void AOnlyRPGCharacter::Attack() {
 
-
-
+}
