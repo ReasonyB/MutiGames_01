@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Damage.h"
 #include "LivingEntity.generated.h"
 
 DECLARE_DELEGATE(LivingEntityDead)
@@ -17,7 +16,7 @@ enum class EStats{
 };
 
 UCLASS(Abstract)
-class ONLYRPG_API ALivingEntity : public AActor, public IDamage
+class ONLYRPG_API ALivingEntity : public AActor
 {
 	GENERATED_BODY()
 
@@ -27,10 +26,9 @@ class ONLYRPG_API ALivingEntity : public AActor, public IDamage
 	bool canSet = true;
 public:
 	ALivingEntity();
-	// interface override;
-	void IDamage::OnDamage(float) override;
 	//delegate
 	LivingEntityDead Dead;
+	float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 	// Fuction
 	UFUNCTION()

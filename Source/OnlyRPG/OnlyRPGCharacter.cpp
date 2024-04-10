@@ -7,8 +7,10 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Engine/DamageEvents.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "LivingEntity.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -131,5 +133,25 @@ void AOnlyRPGCharacter::Look(const FInputActionValue& Value)
 }
 
 void AOnlyRPGCharacter::Attack() {
+	FHitResult hitresult;
 
+	FVector root = GetActorLocation();
+	FVector forward = GetActorForwardVector();
+	float coverage = 150.0F;
+	forward = forward * coverage;
+
+	FVector end =root + forward;
+
+	FCollisionObjectQueryParams objs;
+	objs.AddObjectTypesToQuery(ECC_GameTraceChannel1);
+
+	bool hit = GetWorld()->LineTraceSingleByObjectType(hitresult, root, end, objs);
+	if (hit) {
+		GEngine->AddOnScreenDebugMessage(-1, 1.0F, FColor::Green, TEXT("Living Actor detected"));
+		AActor* other = hitresult.GetActor();
+		if (other) {
+			FDamageEvent DEvent;
+			other->TakeDamage(10.0F, DEvent, GetController(), this);
+		}
+	}
 }

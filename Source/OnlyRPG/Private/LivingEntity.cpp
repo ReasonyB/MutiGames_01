@@ -10,17 +10,20 @@ ALivingEntity::ALivingEntity()
 	Dead.BindUObject(this, &ALivingEntity::OnDead);
 }
 
-void ALivingEntity::OnDamage(float damage){
-	float health = Status[(int)EStats::Health];
+float ALivingEntity::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) {
+	int Hpidx = (int)EStats::Health;
+	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	float health = Status[Hpidx];
 	if (health <= damage) {
-		Status[(int)EStats::Health] = 0;
+		Status[Hpidx] = 0;
 		Dead.Execute();
 	}
 	else {
-		Status[(int)EStats::Health] = health - damage;
+		Status[Hpidx] = health - damage;
 	}
+	return damage;
 }
 
 void ALivingEntity::OnDead() {
-
+	Destroy();
 }
