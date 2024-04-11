@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameFramework/Character.h"
 #include "LivingEntity.generated.h"
 
 DECLARE_DELEGATE(LivingEntityDead)
@@ -16,7 +17,7 @@ enum class EStats{
 };
 
 UCLASS(Abstract)
-class ONLYRPG_API ALivingEntity : public AActor
+class ONLYRPG_API ALivingEntity : public ACharacter
 {
 	GENERATED_BODY()
 

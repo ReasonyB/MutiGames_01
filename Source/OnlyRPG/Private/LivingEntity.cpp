@@ -2,9 +2,23 @@
 
 
 #include "LivingEntity.h"
+#include "Components/CapsuleComponent.h"
 
 ALivingEntity::ALivingEntity()
 {
+	//Component Setting
+	USkeletalMeshComponent* MESH = GetMesh();
+	class UCapsuleComponent* CAPSULE = GetCapsuleComponent();
+
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> DefaultMesh(TEXT("/Game/Characters/Mannequins/Meshes/SKM_Manny.SKM_Manny"));
+	
+	MESH->SetSkeletalMesh(DefaultMesh.Object);
+	MESH->SetRelativeLocation_Direct(FVector(0.0F, 0.0F, -90.0F));
+	MESH->SetRelativeRotation(FQuat(FRotator(0.0F,270.0F,0.0F)));
+	MESH->SetCollisionObjectType(ECC_GameTraceChannel1);
+
+	CAPSULE->SetCapsuleSize(35.0F, 90.0F);
+
 	Status.Init(0, (int)EStats::Count);
 	Status[(int)EStats::Health] = 100;
 	Dead.BindUObject(this, &ALivingEntity::OnDead);
