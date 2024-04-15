@@ -49,6 +49,8 @@ AOnlyRPGCharacter::AOnlyRPGCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	FollowCamera->SetRelativeLocation(FVector(-180.0F, 0.0F, 100.0F));
+
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 	static ConstructorHelpers::FObjectFinder<UInputAction>IA_ATTACK
@@ -88,7 +90,7 @@ void AOnlyRPGCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AOnlyRPGCharacter::Move);
 
 		//Looking
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AOnlyRPGCharacter::Look);
+		//EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AOnlyRPGCharacter::Look);
 
 		//Attack
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AOnlyRPGCharacter::Attack);
@@ -119,18 +121,18 @@ void AOnlyRPGCharacter::Move(const FInputActionValue& Value)
 	}
 }
 
-void AOnlyRPGCharacter::Look(const FInputActionValue& Value)
-{
-	// input is a Vector2D
-	FVector2D LookAxisVector = Value.Get<FVector2D>();
-
-	if (Controller != nullptr)
-	{
-		// add yaw and pitch input to controller
-		AddControllerYawInput(LookAxisVector.X);
-		AddControllerPitchInput(LookAxisVector.Y);
-	}
-}
+//void AOnlyRPGCharacter::Look(const FInputActionValue& Value)
+//{
+//	// input is a Vector2D
+//	FVector2D LookAxisVector = Value.Get<FVector2D>();
+//
+//	if (Controller != nullptr)
+//	{
+//		// add yaw and pitch input to controller
+//		AddControllerYawInput(LookAxisVector.X);
+//		AddControllerPitchInput(LookAxisVector.Y);
+//	}
+//}
 
 void AOnlyRPGCharacter::Attack() {
 	FHitResult hitresult;
@@ -145,7 +147,10 @@ void AOnlyRPGCharacter::Attack() {
 	FCollisionObjectQueryParams objs;
 	objs.AddObjectTypesToQuery(ECC_GameTraceChannel1);
 
-	bool hit = GetWorld()->LineTraceSingleByObjectType(hitresult, root, end, objs);
+	FCollisionQueryParams params;
+	params.AddIgnoredActor(this);
+
+	bool hit = GetWorld()->LineTraceSingleByObjectType(hitresult, root, end, objs, params);
 	if (hit) {
 		GEngine->AddOnScreenDebugMessage(-1, 1.0F, FColor::Green, TEXT("Living Actor detected"));
 		AActor* other = hitresult.GetActor();

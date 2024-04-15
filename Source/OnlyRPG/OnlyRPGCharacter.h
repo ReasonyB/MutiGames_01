@@ -3,13 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "LivingEntity.h"
 #include "InputActionValue.h"
 #include "OnlyRPGCharacter.generated.h"
 
 
 UCLASS(config=Game)
-class AOnlyRPGCharacter : public ACharacter
+class AOnlyRPGCharacter : public ALivingEntity
 {
 	GENERATED_BODY()
 
@@ -49,7 +49,7 @@ protected:
 	void Move(const FInputActionValue& Value);
 
 	/** Called for looking input */
-	void Look(const FInputActionValue& Value);
+	//void Look(const FInputActionValue& Value);
 
 	void Attack();
 

@@ -2,6 +2,7 @@
 
 #include "OnlyRPGGameMode.h"
 #include "OnlyRPGCharacter.h"
+#include "DebugPlayerController.h"
 #include "UObject/ConstructorHelpers.h"
 
 AOnlyRPGGameMode::AOnlyRPGGameMode()
@@ -12,4 +13,5 @@ AOnlyRPGGameMode::AOnlyRPGGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+	PlayerControllerClass = ADebugPlayerController::StaticClass();
 }
